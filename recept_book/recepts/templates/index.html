@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/index.css'%}" type="text/css">
+        <script src="{% static 'js/script.js' %}"></script>
+
+        <title> Книга рецептов </title>
+    </head>
+
+    <body>
+        <header>
+            <h3 style="margin-top: 52px; margin-right: 10px; ">Категории </h3>
+            <div class="dropdown"> <!--https://www.schoolsw3.com/howto/howto_js_dropdown.php-->
+                <button onclick="Categories()" class="dropbtn">| | |</button>
+                <div id="categories" class="categories-content">
+                  <a href="{% url 'meat' %}">Мясо</a>
+                  <a href="{% url 'fish' %}">Рыба</a>
+                  <a href="{% url 'soup' %}">Суп</a>
+                  <a href="{% url 'dish' %}">Гарнир</a>
+                  <a href="{% url 'snack' %}">Закуска</a>
+                  <a href="{% url 'salad' %}">Салат</a>
+                  <a href="{% url 'sauce' %}">Соус</a>
+                  <a href="{% url 'bakery' %}">Выпечка</a>
+                  <a href="{% url 'desert' %}">Десерты</a>
+                  <a href="{% url 'cocktail' %}">Коктейли</a>
+                </div>
+            </div>
+            <div class="logo" style="text-align: center;">
+                <h1 style="size: 24px">Книга рецептов</h1>
+                <h5> Recipe book</h5>
+            </div>
+
+            {% if username == '' or username == None %}
+                <div class = "login">
+                    <form action="{% url 'login_user' %}">
+                        <!--{% csrf_token %}-->
+                        <input type="submit"
+                            class="btn"
+                            value="Войти">
+                    </form>
+                </div>
+            {% else %}
+                <div class = "user">
+                    <p>Логин: {{ username }} </p>
+                    <form action="{% url 'add' %}">
+                        <!--{% csrf_token %}-->
+                        <input type="submit"
+                            class="btn"
+                            value="Добавить рецепт">
+                    </form>
+                </div>
+                <div class = "exit">
+                    <form action="{% url 'logout_user' %}">
+                        <!--{% csrf_token %}-->
+                        <input type="submit"
+                            class="btn"
+                            value="Выйти">
+                    </form>
+                </div>
+            {% endif %}
+        </header>
+
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+
+                {% for key, value in recepts.items %}
+                    <div class="rec">
+                        <div class="rec_main">
+                            <h3><b>{{ value.name }}</b></h3>
+                            <p> {{ value.description }} </p>
+                            <p> Порядок действий: {{ value.steps }} </p>
+                            <p> Ингредиенты: {{ value.steps }} </p>
+                            <p> Время выполнения: {{ value.time }} </p>
+                            <p> Автор: {{ value.author }}</p>
+                        </div>
+
+                        <div class="rec_img">
+                            <img src="{{ value.image.url }}" alt="Uploaded Image">
+                        </div>
+                    </div>
+                {% endfor %}
+
+        </div>
+    </body>
+    <footer>
+        <h5>
+            Github:
+            <a href="https://github.com/RussellMorryson" style="color: white"> Russell Morryson </a>
+        </h5>
+    </footer>
+</html>
